@@ -5,7 +5,7 @@ Meta Name parses path to name based on provided config
 ## Installation
 
 ```
-npm i --save @rocketstation/meta-name
+npm i @rocketstation/meta-name
 ```
 
 ## Usage

@@ -4,6 +4,9 @@
     "Oleksii Bilous <oleksiibilous@rstation.io> (https://rstation.io)",
     "Oleksii Pysanko <oleksiipysanko@rstation.io> (https://rstation.io)"
   ],
+  "dependencies": {
+    "@rocketstation/change-case": "1"
+  },
   "description": "parses path to name based on provided config",
   "devDependencies": {
     "babel-cli": "6",
@@ -26,6 +29,12 @@
   "files": [
     "lib"
   ],
+  "keywords": [
+    "file name",
+    "dir name",
+    "path",
+    "node"
+  ],
   "license": "MIT",
   "main": "lib/index.js",
   "name": "@rocketstation/meta-name",
@@ -38,8 +47,5 @@
     "lint": "eslint src --fix --ignore-pattern *.test.js",
     "test": "jest src"
   },
-  "version": "1.0.0",
-  "dependencies": {
-    "@rocketstation/change-case": "1"
-  }
+  "version": "1.0.1"
 }
