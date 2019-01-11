@@ -1,51 +1,48 @@
 {
   "author": "Rocket Station <contact@rstation.io> (https://rstation.io)",
+  "browserslist": [
+    "current node"
+  ],
   "contributors": [
     "Oleksii Bilous <oleksiibilous@rstation.io> (https://rstation.io)",
     "Oleksii Pysanko <oleksiipysanko@rstation.io> (https://rstation.io)"
   ],
   "dependencies": {
-    "@rocketstation/change-case": "1"
+    "@rocketstation/change-case": "2"
   },
   "description": "parses path to name based on provided config",
   "devDependencies": {
-    "babel-cli": "6",
-    "babel-core": "6",
-    "babel-eslint": "8",
-    "babel-plugin-transform-object-rest-spread": "6",
-    "babel-preset-env": "1",
-    "babel-preset-minify": "0.3",
-    "eslint": "4",
-    "eslint-config-standard": "11",
+    "@babel/cli": "7",
+    "@babel/core": "7",
+    "@babel/preset-env": "7",
+    "babel-eslint": "10",
+    "babel-preset-minify": "0.5",
+    "cross-env": "5",
+    "eslint": "5",
+    "eslint-config-prettier": "3",
+    "eslint-config-standard": "12",
     "eslint-plugin-import": "2",
-    "eslint-plugin-node": "6",
-    "eslint-plugin-promise": "3",
-    "eslint-plugin-standard": "3",
-    "jest": "22"
-  },
-  "engines": {
-    "node": ">=9"
+    "eslint-plugin-jest": "22",
+    "eslint-plugin-node": "8",
+    "eslint-plugin-prettier": "3",
+    "eslint-plugin-promise": "4",
+    "eslint-plugin-standard": "4",
+    "jest": "23",
+    "prettier": "1"
   },
   "files": [
-    "lib"
-  ],
-  "keywords": [
-    "file name",
-    "dir name",
-    "path",
-    "node"
+    "build"
   ],
   "license": "MIT",
-  "main": "lib/index.js",
+  "main": "build/index.js",
   "name": "@rocketstation/meta-name",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rocketstation/meta-name.git"
   },
   "scripts": {
-    "build": "rm -rf lib && babel src -d lib --ignore *.test.js",
-    "lint": "eslint src --fix --ignore-pattern *.test.js",
+    "build": "rm -rf build && cross-env NODE_ENV=production babel src -d build --ignore src/**/*.test.js",
     "test": "jest src"
   },
-  "version": "1.0.1"
+  "version": "2.0.0"
 }

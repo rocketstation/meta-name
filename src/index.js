@@ -1,32 +1,29 @@
-import * as changeCase from '@rocketstation/change-case'
+const changeCase = require('@rocketstation/change-case')
+const path = require('path')
 
-import {
-  parse,
-  sep,
-} from 'path'
+module.exports = function(
+  pathTo = '',
+  {
+    caseId = 'c',
+    dispEnd = 0,
+    dispStart = 0,
+    filters = [],
+    isArr,
+    isStrict,
+    root,
+    shouldSkipRoot,
+    structure = ['ext', 'file', 'dir'],
+  } = {}
+) {
+  const { dir: dirName, name: fileName, ext: extName } = path.parse(pathTo)
 
-export default (path, {
-  caseId = 'cl',
-  dispEnd = 0,
-  dispStart = 0,
-  filters = [],
-  isArr,
-  isStrict,
-  root,
-  shouldSkipRoot,
-  structure = ['ext', 'file', 'dir'],
-} = {}) => {
-  const {
-    dir: dirName,
-    name: fileName,
-    ext: extName,
-  } = parse(path)
   let isInvalid = false
 
-  let dirArr = dirName.split(sep).filter((v) => v.length > 0)
+  let dirArr = dirName.split(path.sep).filter((v) => v.length > 0)
 
   if (root) {
-    if (dirArr.includes(root)) dirArr = dirArr.slice(dirArr.lastIndexOf(root) + (shouldSkipRoot ? 1 : 0))
+    if (dirArr.includes(root))
+      dirArr = dirArr.slice(dirArr.lastIndexOf(root) + (shouldSkipRoot ? 1 : 0))
     else isInvalid = true
   }
 
@@ -35,12 +32,15 @@ export default (path, {
 
   let name = structure.reduce((r, v) => {
     switch (v) {
-      case 'ext': return r.concat(extName.split('.').splice(1))
+      case 'ext':
+        return r.concat(extName.split('.').splice(1))
       case 'file':
         r.push(fileName)
         return r
-      case 'dir': return r.concat(dirArr)
-      default: return r
+      case 'dir':
+        return r.concat(dirArr)
+      default:
+        return r
     }
   }, [])
 

@@ -22,7 +22,7 @@ console.log(metaName(path)) // extFileDir
 
 Name | Type | Vals | Default | Description
 | - | - | - | - | - |
-`caseId` | `String` | [Change Case](https://github.com/rocketstation/change-case) | `'cl'` | Defines name case
+`caseId` | `String` | [Change Case](https://github.com/rocketstation/change-case) | `'c'` | Defines name case
 `structure` | `Array<String>` | `[...String('dir', 'file', 'ext')]` | `['ext', 'file', 'dir']` | Defines name pattern
 `filters` | `Array<String>` | `[...String]` | `[]` | Filters specified dirs, files, extensions
 `dispStart` | `Number` | Any Positive Int | `0` | Skips `N` folders from start
