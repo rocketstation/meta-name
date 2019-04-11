@@ -23,7 +23,7 @@ module.exports = ({
 
     if (!root) return
 
-    obj.dir = obj.dir.slice(obj.dir.indexOf(root), obj.dir.length)
+    obj.dir = obj.dir.slice(obj.dir.lastIndexOf(root), obj.dir.length)
   }
 
   obj.dir = obj.dir.slice(dispStart, obj.dir.length - dispEnd)
