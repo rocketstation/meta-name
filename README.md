@@ -11,27 +11,48 @@ npm i @rocketstation/meta-name
 ## Usage
 
 ```javascript
-import metaName from '@rocketstation/meta-name'
+import parser from '@rocketstation/meta-name'
 
-const path = 'dir/file.ext'
+const path = 'dir/name.ext'
 
-console.log(metaName(path)) // extFileDir
+const parse = parser({
+  dispEnd: 0,
+  dispStart: 0,
+  exts: ['ext'],
+  filters: [],
+  prefix: '',
+  roots: ['dir'],
+  suffix: [],
+  template: ['dir', 'name'],
+})
+
+console.log(parse(path, 'k')) // dir-name
 ```
 
 ## Config
 
-Name | Type | Vals | Default | Description
-| - | - | - | - | - |
-`caseId` | `String` | [Change Case](https://github.com/rocketstation/change-case) | `'c'` | Defines name case
-`structure` | `Array<String>` | `[...String('dir', 'file', 'ext')]` | `['ext', 'file', 'dir']` | Defines name pattern
-`filters` | `Array<String>` | `[...String]` | `[]` | Filters specified dirs, files, extensions
-`dispStart` | `Number` | Any Positive Int | `0` | Skips `N` folders from start
-`dispEnd` | `Number` | Any Positive Int | `0` | Skips `N` folders from end
-`isArr` | `Boolean` | `(true, false)` | `undefined` | If `true`, returns `Array` instead of `String`
-`root` | `String` | Any String | `undefined` | If set & path includes `root` folder, skips all folders before. Otherwise parses full path
-`shouldSkipRoot` | `Boolean` | `(true, false)` | `undefined` | If `true`, skips `root` folder
-`isStrict` | `Boolean` | `(true, false)` | `undefined` | If `true` & path not includes `root` folder, returns empty `String` or `Array`
+  `parser()`
 
+  `dispEnd` - amount of dirs from root to be omitted. Default is `0`
+
+  `dispStart` - amount of dirs from file to be omitted. Default is `0`
+
+  `exts` - array of extensions to be handled. If provided, paths with invalid extensions will be omitted. Default is `undefined`
+
+  `filters` - array of strings which must be omitted. Default is `[]`
+
+  `prefix` - string or array of strings to be added before result. Default is `undefined`
+
+  `roots` - array of roots to be handled. If provided, paths with invalid roots will be omitted. Default is `undefined`
+
+  `suffix` - string or array of strings to be added after result. Default is `undefined`
+
+  `template` - array of strings. supported values are `'root', 'dir', 'base', 'name', 'ext'`. Default is `['dir', 'name']`
+
+  `parse()`
+
+  `source` - any valid path. Default is `''`
+  `case` - Default is `'c'`. Any case kind from [@rocketstation/change-case](https://github.com/rocketstation/change-case)
 
 ## Motivation
 

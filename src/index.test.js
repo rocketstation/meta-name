@@ -1,84 +1,50 @@
-const mn = require('./index')
+const parser = require('./index')
 
-const path = '/prefix/root/foo/bar/file.ext'
+const path = 'root/dir/name.ext'
 
 it('parses path to name', () => {
-  expect(mn(path)).toBe('extFilePrefixRootFooBar')
+  expect(parser()(path)).toEqual('rootDirName')
 })
 
-it('return array if isArr === true', () => {
-  expect(mn(path, { isArr: true })).toEqual([
-    'ext',
-    'file',
-    'prefix',
-    'root',
-    'foo',
-    'bar',
-  ])
+it('supports casing', () => {
+  expect(parser()(path, 'k')).toEqual('root-dir-name')
 })
 
-it('changes name case', () => {
-  expect(mn(path, { caseId: 'p' })).toBe('ExtFilePrefixRootFooBar')
+it('returns array', () => {
+  expect(parser()(path, false)).toEqual(['root', 'dir', 'name'])
 })
 
-it('customizes name structure', () => {
-  expect(mn(path, { structure: ['dir', 'file', 'ext'] })).toBe(
-    'prefixRootFooBarFileExt'
+it('adds prefix and suffix', () => {
+  expect(
+    parser({
+      prefix: 'prefix',
+      suffix: 'suffix',
+    })(path)
+  ).toEqual('prefixRootDirNameSuffix')
+})
+
+it('supports templating', () => {
+  expect(parser({ template: ['ext', 'name', 'dir'] })(path)).toEqual(
+    'extNameRootDir'
   )
 })
 
-it('skips invalid structure components', () => {
-  expect(
-    mn(path, {
-      structure: [
-        'invalid',
-        'dir',
-        'invalid',
-        'file',
-        'invalid',
-        'ext',
-        'invalid',
-      ],
-    })
-  ).toBe('prefixRootFooBarFileExt')
+it('filters specific names', () => {
+  expect(parser({ filters: ['dir'] })(path)).toEqual('rootName')
 })
 
-it('skips certain amount of folders from start if dispStart specified', () => {
-  expect(mn(path, { dispStart: 1 })).toBe('extFileRootFooBar')
+it('filters by extensions', () => {
+  expect(parser({ exts: ['js'] })(path)).toEqual()
+  expect(parser({ exts: ['ext'] })(path)).toEqual('rootDirName')
 })
 
-it('skips certain amount of folders from end if dispEnd specified', () => {
-  expect(mn(path, { dispEnd: 1 })).toBe('extFilePrefixRootFoo')
+it('filters by roots', () => {
+  expect(parser({ roots: ['tst'] })(path)).toEqual()
+  expect(parser({ roots: ['dir'] })(path)).toEqual('dirName')
+  expect(parser({ roots: ['root'] })(path)).toEqual('rootDirName')
 })
 
-it('skips all folders before root folder if root is specified', () => {
-  expect(mn(path, { root: 'root' })).toBe('extFileRootFooBar')
-})
-
-it('skips all folders before root & root folder if root is specified & shouldSkipRoot === true', () => {
-  expect(
-    mn(path, {
-      root: 'root',
-      shouldSkipRoot: true,
-    })
-  ).toBe('extFileFooBar')
-})
-
-it('returns empty string if path doesn’t contain root if root is specified & isStrict === true', () => {
-  expect(
-    mn(path, {
-      root: 'tst',
-      isStrict: true,
-    })
-  ).toBe('')
-})
-
-it('returns empty array if path doesn’t contain root if root is specified & isStrict === true & isArr === true', () => {
-  expect(
-    mn(path, {
-      root: 'tst',
-      isArr: true,
-      isStrict: true,
-    })
-  ).toEqual([])
+it('supports displacement', () => {
+  expect(parser({ dispStart: 1 })(path)).toEqual('dirName')
+  expect(parser({ dispEnd: 1 })(path)).toEqual('rootName')
 })

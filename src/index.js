@@ -1,52 +1,44 @@
 const changeCase = require('@rocketstation/change-case')
 const path = require('path')
 
-module.exports = function(
-  pathTo = '',
-  {
-    caseId = 'c',
-    dispEnd = 0,
-    dispStart = 0,
-    filters = [],
-    isArr,
-    isStrict,
-    root,
-    shouldSkipRoot,
-    structure = ['ext', 'file', 'dir'],
-  } = {}
-) {
-  const { dir: dirName, name: fileName, ext: extName } = path.parse(pathTo)
+module.exports = ({
+  dispEnd = 0,
+  dispStart = 0,
+  exts,
+  filters = [],
+  prefix,
+  roots,
+  suffix,
+  template = ['dir', 'name'],
+} = {}) => (source = '', caseKind = 'c') => {
+  const obj = path.parse(source)
 
-  let isInvalid = false
+  obj.dir = obj.dir.split(path.sep)
+  obj.ext = obj.ext.replace('.', '')
 
-  let dirArr = dirName.split(path.sep).filter((v) => v.length > 0)
+  if (exts && !exts.includes(obj.ext)) return
 
-  if (root) {
-    if (dirArr.includes(root))
-      dirArr = dirArr.slice(dirArr.lastIndexOf(root) + (shouldSkipRoot ? 1 : 0))
-    else isInvalid = true
+  if (roots) {
+    let root = roots.find((v) => obj.dir.includes(v))
+
+    if (!root) return
+
+    obj.dir = obj.dir.slice(obj.dir.indexOf(root), obj.dir.length)
   }
 
-  if (dispStart > 0) dirArr = dirArr.slice(dispStart, dirArr.length)
-  if (dispEnd > 0) dirArr = dirArr.slice(0, dirArr.length - dispEnd)
+  obj.dir = obj.dir.slice(dispStart, obj.dir.length - dispEnd)
 
-  let name = structure.reduce((r, v) => {
-    switch (v) {
-      case 'ext':
-        return r.concat(extName.split('.').splice(1))
-      case 'file':
-        r.push(fileName)
-        return r
-      case 'dir':
-        return r.concat(dirArr)
-      default:
-        return r
-    }
-  }, [])
+  const id = []
+    .concat(
+      prefix,
+      template
+        .reduce((r, v) => (obj.hasOwnProperty(v) ? r.concat(obj[v]) : r), [])
+        .filter((v) => !filters.includes(v)),
+      suffix
+    )
+    .filter(Boolean)
 
-  if (isStrict && isInvalid) return isArr ? [] : ''
+  if (changeCase.hasOwnProperty(caseKind)) return changeCase[caseKind](id)
 
-  name = name.filter((v) => !filters.includes(v))
-
-  return isArr ? name : changeCase[caseId](name)
+  return id
 }
